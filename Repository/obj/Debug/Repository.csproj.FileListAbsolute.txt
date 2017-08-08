@@ -1,0 +1,5 @@
+C:\Users\Murilo\Documents\Visual Studio 2015\Projects\MVC\Snake\Repository\bin\Debug\Repository.dll
+C:\Users\Murilo\Documents\Visual Studio 2015\Projects\MVC\Snake\Repository\bin\Debug\Repository.pdb
+C:\Users\Murilo\Documents\Visual Studio 2015\Projects\MVC\Snake\Repository\obj\Debug\Repository.dll
+C:\Users\Murilo\Documents\Visual Studio 2015\Projects\MVC\Snake\Repository\obj\Debug\Repository.pdb
+C:\Users\Murilo\Documents\Visual Studio 2015\Projects\MVC\Snake\Repository\obj\Debug\Repository.csprojResolveAssemblyReference.cache

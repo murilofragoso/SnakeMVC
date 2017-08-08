@@ -1,0 +1,369 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<script>
+    var posicao = 2;
+    var tempo;
+    var direcaoAtual;
+    var controleBotao;
+    var array = [0, 1, 2];
+    var tamanhoArray = array.length;
+    var comida;
+    var controleBotao2 = 0;
+    var pontuacao = 0;
+    var comidaTempo;
+    var comidaTempoTela;
+    var tempoAtual = 10;
+    $(document).ready(function() {
+        pontosTempo();
+        tempoComida();
+        comidaTempo = setInterval(tempoComida, 10000);
+        $(".botao").animate({ opacity: 0 }, 0);
+
+        $(document).keypress(function(e) {
+            if (e.keyCode === 100 || e.keyCode === 68) {
+                if (controleBotao !== 1 && controleBotao !== 2 && controleBotao2 !== 1) {
+                    direcaoAtual = e.keyCode;
+                    tempo = setTimeout(direita, 200);
+                    controleBotao = 1;
+                    controleBotao2 = 1;
+                }
+            } else if (e.keyCode === 97 || e.keyCode === 65) {
+                if (controleBotao !== 2 && controleBotao !== 1 && controleBotao2 !== 1) {
+                    direcaoAtual = e.keyCode;
+                    tempo = setTimeout(esquerda, 200);
+                    controleBotao = 2;
+                    controleBotao2 = 1;
+                }
+            } else if (e.keyCode === 119 || e.keyCode === 87) {
+                if (controleBotao !== 3 && controleBotao !== 4 && controleBotao2 !== 1) {
+                    direcaoAtual = e.keyCode;
+                    tempo = setTimeout(cima, 200);
+                    controleBotao = 3;
+                    controleBotao2 = 1;
+                }
+            } else if (e.keyCode === 115 || e.keyCode === 83) {
+                if (controleBotao !== 4 && controleBotao !== 3 && controleBotao2 !== 1) {
+                    direcaoAtual = e.keyCode;
+                    tempo = setTimeout(baixo, 200);
+                    controleBotao = 4;
+                    controleBotao2 = 1;
+                }
+            }
+        });
+        $("#reiniciar").click(function() {
+            reiniciar();
+        });
+
+        $("#placar").click(function() {
+            $.get('@Url.Action("ExibirTabela","Home")').done(function(data) {
+                $("#divGeralSnake").html(data);
+            });
+        });
+
+        $("#salvarPontos").click(function () {
+            $.get('@Url.Action("SalvarPontos","Home")', {
+                pontos: pontuacao
+            }).done(function() {
+                alert("Pontuação salva!");
+            })
+        })
+    });
+
+
+    function direita() {
+        if (direcaoAtual === 100) {
+            if (
+                posicao === 9 || posicao === 19 || posicao === 29 || posicao === 39 ||
+                    posicao === 49 || posicao === 59 || posicao === 69 || posicao === 79 ||
+                    posicao === 89 || posicao === 99) {
+                posicao -= 9;
+            } else {
+                posicao++;
+            }
+            if (posicao === comida) {
+                comeu();
+            } else {
+                addArray();
+            }
+            tempo = setTimeout(direita, 200);
+        }
+    }
+
+
+    function esquerda() {
+        if (direcaoAtual === 97) {
+            if (
+                posicao === 0 || posicao === 10 || posicao === 20 || posicao === 30 ||
+                    posicao === 40 || posicao === 50 || posicao === 60 || posicao === 70 ||
+                    posicao === 80 || posicao === 90) {
+                posicao += 9;
+            } else {
+                posicao--;
+            }
+            if (posicao === comida) {
+                comeu();
+            } else {
+                addArray();
+            }
+            tempo = setTimeout(esquerda, 200);
+        }
+    }
+
+
+    function cima() {
+        if (direcaoAtual === 119) {
+            if (
+                posicao === 0 || posicao === 1 || posicao === 2 || posicao === 3 ||
+                    posicao === 4 || posicao === 5 || posicao === 6 || posicao === 7 ||
+                    posicao === 8 || posicao === 9) {
+                posicao += 90;
+            } else {
+                posicao -= 10;
+            }
+            if (posicao === comida) {
+                comeu();
+            } else {
+                addArray();
+            }
+            tempo = setTimeout(cima, 200);
+        }
+    }
+
+
+    function baixo() {
+        if (direcaoAtual === 115) {
+            if (
+                posicao === 90 || posicao === 91 || posicao === 92 || posicao === 93 ||
+                    posicao === 94 || posicao === 95 || posicao === 96 || posicao === 97 ||
+                    posicao === 98 || posicao === 99) {
+                posicao -= 90;
+            } else {
+                posicao += 10;
+            }
+            if (posicao === comida) {
+                comeu();
+            } else {
+                addArray();
+            }
+            tempo = setTimeout(baixo, 200);
+        }
+    }
+
+
+    function addArray() {
+        controleBotao2 = 0;
+        perdeu();
+        $("td:eq(" + posicao + ")").addClass("snake");
+        $("td:eq(" + array[0] + ")").removeClass("snake");
+        array.splice(tamanhoArray, 0, posicao);
+        array.splice(0, 1);
+    }
+
+
+    function comeu() {
+        clearInterval(comidaTempo);
+        controleBotao2 = 0;
+        perdeu();
+        $("td:eq(" + posicao + ")").addClass("snake");
+        array.splice(tamanhoArray, 0, posicao);
+        tamanhoArray = array.length;
+        pontuacao += 10;
+        comidaTempo = setInterval(tempoComida, 10000);
+        tempoComida();
+        pontosTempo();
+    }
+
+
+    function tempoComida() {
+        tempoAtual = 10;
+        pontosTempo();
+        $("td:eq(" + comida + ")").removeClass("alimento");
+        comida = Math.floor(Math.random() * 99);
+        if (array.filter(function(item) { return item === comida }).length) {
+            tempoComida();
+
+        } else {
+            $("td:eq(" + comida + ")").addClass("alimento");
+        }
+        clearInterval(comidaTempoTela);
+        comidaTempoTela = setInterval(TempoAtual, 1000);
+    }
+
+
+    function perdeu() {
+        for (var i = 0; i < array.length; i++) {
+            if (posicao === array[i]) {
+                alert("Você Perdeu!");
+                direcaoAtual = 0;
+                controleBotao2 = 1;
+                $(".botao").animate({ opacity: 1 }, 0);
+                clearInterval(comidaTempo);
+                clearInterval(comidaTempoTela);
+            }
+        }
+    }
+
+    function pontosTempo() {
+        $.get('@Url.Action("Pontos", "Home")').done(function(data) {
+            $("#pontos").html(data);
+        });
+    }
+
+    function TempoAtual() {
+        pontosTempo();
+        tempoAtual -= 1;
+    }
+
+    function reiniciar() {
+        for (var i = 0; i < array.length; i++) {
+            $("td:eq(" + array[i] + ")").removeClass("snake");
+        }
+        for (var a = 0; a < 3; a++) {
+            $("td:eq(" + a + ")").addClass("snake");
+        }
+        controleBotao2 = 0;
+        controleBotao = 0;
+        $(".botao").animate({ opacity: 0 }, 0);
+        tempoComida();
+        array = [0, 1, 2];
+        tamanhoArray = array.length;
+        posicao = 2;
+        pontosTempo();
+        pontuacao = 0;
+
+    }
+</script>
+<div id="divGeralSnake">
+    <div id="pontos"></div>
+    <table id="table">
+        <tr>
+            <td class="snake"></td>
+            <td class="snake"></td>
+            <td class="snake"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+    <div id="botoes">
+        <input type="button" id="reiniciar" class="botao" value="Reiniciar Jogo">
+        <input type="button" id="salvarPontos" class="botao" value="Salvar Pontuação"/>
+        <input type="button" id="placar" class="botao" value="Placar Geral" />
+    </div>
+</div>
+

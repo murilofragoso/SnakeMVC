@@ -1,0 +1,100 @@
+﻿#table{
+    width: 800px;
+    height: 800px;
+    border: 2px solid black;
+    margin: auto;
+}
+.snake{
+    background-color: green;
+}
+.alimento{
+    background-color: red;
+}
+.botao{
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+}
+#pontos,#botoes{
+    width: 800px;
+    height: 50px;
+    margin: auto;
+    text-align: center;
+}
+p {
+    font-size: 30pt;
+    margin: 10px;
+}
+#displayTempo{
+    float:left;
+    margin-left: 100px;
+}
+#displayPontos{
+    float:right;
+    margin-right: 100px;
+}
+#formLogin,#formCadastro {
+    width: 500px;
+    height: 500px;
+    margin: auto;
+    text-align: center;
+    border: 1px solid black;
+}
+.divUsuarioSenha{
+    margin-left:30px;
+    width: 250px;
+    height: 150px;
+}
+label{
+    float: left;
+    font-size: 15pt;
+    margin-top: 40px;
+}
+.input{
+    display: block;
+    margin-top: 40px;
+    float: right;
+}
+.divConfirmar {
+    height: 125px;
+    width: 500px;
+    text-align: center;
+}
+.divConfirmar input {
+    width: 80px;
+    height: 60px;
+    margin: 20px;
+}
+img {
+    margin-top: 60px;
+    float: right;
+}
+.divUsuarioSenhaCadastro {
+    margin-left: 30px;
+    width: 350px;
+    height: 100px;
+}
+#fieldsetTabela {
+    height: 600px;
+    width: 500px;
+    margin: auto;
+}
+#fieldsetTabela legend {
+    text-align: center;
+    font-size: 40pt;
+}
+#fieldsetTabela ol {
+    margin-left: 50px; 
+}
+#fieldsetTabela li {
+    font-size: 30pt;
+}
+#divRetornarSnake {
+    height: 200px;
+    width: 200px;
+    margin: auto;
+    text-align: center;
+}
+#salvarPontos {
+    width: 150px;
+}

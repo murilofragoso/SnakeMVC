@@ -1,0 +1,28 @@
+﻿@using Snake.Models
+@model List<PontuacaoDoJogador>
+@{
+    ViewBag.Title = "ExibirTabela";
+}
+<script>
+    $(document).ready(function() {
+        $("#retornarSnake").click(function() {
+            $.get('@Url.Action("Index","Home")').done(function(data) {
+                $("#divGeralPontos").html(data);
+            })
+        })
+    })
+</script>
+<div id="divGeralPontos">
+    <fieldset id="fieldsetTabela">
+        <legend>Pontuações</legend>
+        <ol id="listaPontos">
+            @foreach (var item in Model)
+            {
+                <li>@item.NomeJogador @item.Pontos</li>
+            }
+        </ol>
+    </fieldset>
+    <div id="divRetornarSnake">
+        <input type="button" id="retornarSnake" class="botao" value="Voltar" />
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<script>
+
+    $(document).ready(function() {
+        $("#confirmar").click(function () {
+            var nomeJogador = $("#nomeJogador").val();
+            var senhaJogador = $("#senhaJogador").val();
+
+            if (nomeJogador != "" && senhaJogador != "") {
+                $.get('@Url.Action("VerificarLogin", "Home")', {
+                    nome: nomeJogador,
+                    senha: senhaJogador
+                }).done(function(data) {
+                    $("#divGeralLogin").html(data);
+                }).fail(function(xhr) {
+                    alert("Usuário ou senha invalido!");
+                });
+            } else {
+                alert("Todos os campos devem ser preenchidos!");
+            }
+        });
+
+        $("#cadastro").click(function() {
+            $.get('@Url.Action("Cadastro","Home")').done(function(data) {
+                $("#divGeralLogin").html(data);
+            })
+        });
+    });
+
+</script>
+<div id="divGeralLogin">
+    <form id="formLogin">
+        <h1>Login</h1>
+        <img src="../../Content/SnakeLogin.jpg" />
+        <div class="divUsuarioSenha">
+            <label for="nomeJogador" class="login">Nome:</label>
+            <input type="text" id="nomeJogador" class="input" />
+        </div>
+        <div class="divUsuarioSenha">
+            <label for="senhaJogador" class="login">Senha:</label>
+            <input type="password" id="senhaJogador" class="input" />
+        </div>
+        <div class="divConfirmar">
+            <input type="button" id="confirmar" value="Cofirmar" />
+            <input type="button" id="cadastro" value="Cadastrar" />
+        </div>
+    </form>
+</div>

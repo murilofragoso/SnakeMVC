@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Cadastro";
+}
+<script>
+
+    $(document).ready(function() {
+        $("#confirmarCadastro").click(function() {
+            var nome = $("#nomeCadastro").val();
+            var senha = $("#senhaCadastro").val();
+            var confirmarSenha = $("#confirmarSenhaCadastro").val();
+            if (nome === "" || senha === "" || confirmarSenha === "") {
+                alert("Todos os campos devem ser preenchidos");
+            } else {
+                if (senha === confirmarSenha) {
+                    $.get('@Url.Action("Cadastrar", "Home")', {
+                        nome: nome,
+                        senha: senha
+                    }).done(function (data) {
+                        if (data === false) {
+                            alert("Usuario ja existe!");
+                        } else {
+                            $("#divGeralCadastro").html(data);
+                            alert("Cadastro efetuado com sucesso!");
+                        }
+                    });
+                } else {
+                    alert("As senhas não conferem!");
+                }
+            }
+        });
+
+        $("#cancelarCadastro").click(function() {
+            $.get('@Url.Action("CancelarCadastro", "Home")').done(function(data) {
+                $("#divGeralCadastro").html(data);
+            })
+        })
+    })
+
+</script>
+<div id="divGeralCadastro">
+    <form id="formCadastro">
+        <h1>Cadastro</h1>
+        <img src="../../Content/SnakeLogin.jpg" />
+        <div class="divUsuarioSenhaCadastro">
+            <label for="nomeCadastro">Nome:</label>
+            <input type="text" id="nomeCadastro" class="input" />
+        </div>
+        <div class="divUsuarioSenhaCadastro">
+            <label for="senhaCadastro">Senha:</label>
+            <input type="password" id="senhaCadastro" class="input" />
+        </div>
+        <div class="divUsuarioSenhaCadastro">
+            <label for="confirmarSenhaCadastro">Confirmar Senha:</label>
+            <input type="password" id="confirmarSenhaCadastro" class="input" />
+        </div>
+        <div class="divConfirmar">
+            <input type="button" id="confirmarCadastro" value="Cofirmar" />
+            <input type="button" id="cancelarCadastro" value="Cancelar" />
+        </div>
+    </form>
+</div>
